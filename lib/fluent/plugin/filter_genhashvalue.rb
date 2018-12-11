@@ -11,7 +11,7 @@ module Fluent::Plugin
     config_param :set_key, :string, :default => '_hash'
     config_param :inc_time_as_key, :bool, :default => true
     config_param :inc_tag_as_key, :bool, :default => true
-    config_param :crop_string, :integer, :default => '20'
+    config_param :crop_string, :integer, :default => 20
     config_param :separator, :string, :default => '_'
     config_param :hash_type, :string, :default => 'sha256'
     config_param :remove_digit, :bool, :default => false
