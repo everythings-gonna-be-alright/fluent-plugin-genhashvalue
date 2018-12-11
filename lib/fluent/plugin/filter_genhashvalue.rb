@@ -49,9 +49,9 @@ module Fluent::Plugin
       s.gsub!(/\d+/,"")
       end
       if base64_enc || base91_enc then
-        record[set_key] = hash_enc(hash_type, s[0, $crop_string])
+        record[set_key] = hash_enc(hash_type, s[0, crop_string])
       else
-        record[set_key] = hash_hex(hash_type, s[0, $crop_string])
+        record[set_key] = hash_hex(hash_type, s[0, crop_string])
       end
       record
     end
