@@ -16,6 +16,7 @@ module Fluent::Plugin
     config_param :hash_type, :string, :default => 'sha256'
     config_param :remove_digit, :bool, :default => false
     config_param :last_characters, :bool, :default => false
+    config_param :remove_regexp, :array, :default => []
     config_param :base64_enc, :bool, :default => false
     config_param :base91_enc, :bool, :default => false
 
@@ -46,8 +47,13 @@ module Fluent::Plugin
       s += time.to_s + separator if inc_time_as_key
 
       s += keys.map {|k| record[k]}.join(separator)
+      if remove_regexp.any?
+        remove_regexp.each do |x|
+          s = s.gsub(x, "")
+        end
+      end
       if remove_digit
-        s.gsub!(/\d+/,"")
+        s = s.gsub(/\d+/, "")
       end
       if last_characters
         crop_count_end = 3
