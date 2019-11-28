@@ -15,6 +15,7 @@ module Fluent::Plugin
     config_param :separator, :string, :default => '_'
     config_param :hash_type, :string, :default => 'sha256'
     config_param :remove_digit, :bool, :default => false
+    config_param :last_characters, :bool, :default => false
     config_param :base64_enc, :bool, :default => false
     config_param :base91_enc, :bool, :default => false
 
@@ -46,12 +47,19 @@ module Fluent::Plugin
 
       s += keys.map {|k| record[k]}.join(separator)
       if remove_digit
-      s.gsub!(/\d+/,"")
+        s.gsub!(/\d+/,"")
+      end
+      if last_characters
+        crop_count_end = 3
+        crop_count_begin = crop_count - crop_count_end
+        b = s[0, crop_count_begin]
+        e = s.split(//).last(crop_count_end).join
+        s = b+e
       end
       if base64_enc || base91_enc then
-        record[set_key] = hash_enc(hash_type, s[0, crop_string ])
+        record[set_key] = hash_enc(hash_type, s[0, crop_count ])
       else
-        record[set_key] = hash_hex(hash_type, s[0, crop_string ])
+        record[set_key] = hash_hex(hash_type, s[0, crop_count ])
       end
       record
     end
